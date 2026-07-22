@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Room Form - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title" th:text="${room.id == null ? 'Add New Room' : 'Edit Room'}"></h1>
+            <a th:href="@{/rooms}" class="btn btn-secondary">
+                <i data-feather="arrow-left"></i> Back to Registry
+            </a>
+        </div>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <form th:action="${room.id == null ? '/rooms/add' : '/rooms/edit/' + room.id}" th:object="${room}" method="post">
+                <div class="form-group">
+                    <label for="number">Room Number</label>
+                    <input type="text" id="number" th:field="*{number}" required placeholder="e.g. 101, 204B">
+                </div>
+                
+                <div class="form-group">
+                    <label for="type">Room Class</label>
+                    <select id="type" th:field="*{type}">
+                        <option value="Classic Single">Classic Single</option>
+                        <option value="Classic Double">Classic Double</option>
+                        <option value="Deluxe Suite">Deluxe Suite</option>
+                        <option value="Penthouse">Penthouse</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="price">Nightly Rate ($)</label>
+                    <input type="number" id="price" th:field="*{price}" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Current Status</label>
+                    <select id="status" th:field="*{status}">
+                        <option value="available">Available</option>
+                        <option value="occupied">Occupied</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+                
+                <div style="margin-top: 32px; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary" style="padding: 14px 32px;">
+                        <i data-feather="save"></i> Save Room Record
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

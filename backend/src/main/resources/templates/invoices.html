@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Finance & Billing - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Financial Ledger</h1>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Guest</th>
+                        <th>Room Charges</th>
+                        <th>Taxes</th>
+                        <th>Total Due</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="inv : ${invoices}">
+                        <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--primary-color);" th:text="'INV-' + ${inv.id}"></td>
+                        <td th:text="${inv.booking.guest.name}"></td>
+                        <td th:text="'$' + ${#numbers.formatDecimal(inv.roomCharges, 1, 2)}"></td>
+                        <td th:text="'$' + ${#numbers.formatDecimal(inv.taxes, 1, 2)}"></td>
+                        <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600;" th:text="'$' + ${#numbers.formatDecimal(inv.totalAmount, 1, 2)}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${inv.status == 'Paid' ? 'available' : 'danger'}" th:text="${inv.status}"></span>
+                        </td>
+                        <td style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
+                            <form th:if="${inv.status == 'Unpaid'}" th:action="@{/invoices/pay/{id}(id=${inv.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-primary" style="padding: 6px 12px; border: none; background: var(--success-color);">
+                                    <i data-feather="credit-card" style="width: 14px; height: 14px;"></i> Mark Paid
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(invoices)}">
+                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            No invoices generated yet. Generate an invoice from the Bookings ledger.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

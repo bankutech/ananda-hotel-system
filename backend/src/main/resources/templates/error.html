@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Error - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 70vh; text-align: center;">
+            <div style="font-size: 80px; font-weight: 800; color: var(--danger-color); margin-bottom: 20px;">
+                <span th:text="${status}">404</span>
+            </div>
+            <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 16px;">Oops! Something went wrong.</h1>
+            <p style="color: var(--text-secondary); font-size: 18px; max-width: 500px; margin-bottom: 32px;">
+                The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. 
+                <br><br>
+                <i style="color: var(--danger-color);" th:text="${error}">Error details...</i>
+            </p>
+            <a th:href="@{/}" class="btn btn-primary" style="padding: 12px 24px; font-size: 16px;">
+                Return to Dashboard
+            </a>
+        </div>
+    </section>
+</body>
+</html>

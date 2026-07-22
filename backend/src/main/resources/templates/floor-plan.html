@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Visual Floor Plan - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Interactive Floor Plan</h1>
+            <a th:href="@{/rooms}" class="btn btn-secondary">
+                <i data-feather="list"></i> Switch to Registry View
+            </a>
+        </div>
+
+        <div class="floor-plan-container">
+            <div th:each="entry : ${roomsByFloor}" class="floor-level" th:attr="data-floor=${entry.key}">
+                <div class="hallway">
+                    <a th:each="room : ${entry.value}" 
+                       th:href="@{/rooms/edit/{id}(id=${room.id})}" 
+                       th:class="'room-node ' + ${room.maintenanceStatus == 'OutOfOrder' ? 'maintenance' : (room.status == 'occupied' ? 'occupied' : 'available')}"
+                       th:title="${room.maintenanceStatus == 'OutOfOrder' ? 'Maintenance Required' : room.status}">
+                        
+                        <div class="door-handle"></div>
+                        <h3 th:text="${room.number}"></h3>
+                        <div style="font-family: var(--font-body); font-size: 11px; text-transform: uppercase; font-weight: 700;">
+                            <span th:if="${room.maintenanceStatus == 'OutOfOrder'}">Out of Order</span>
+                            <span th:if="${room.maintenanceStatus != 'OutOfOrder'}" th:text="${room.status}"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div th:if="${#maps.isEmpty(roomsByFloor)}" style="text-align: center; padding: 60px; color: var(--text-secondary); background: var(--surface-color); border: 1px dashed var(--border-strong);">
+                No rooms available to map.
+            </div>
+        </div>
+    </section>
+</body>
+</html>

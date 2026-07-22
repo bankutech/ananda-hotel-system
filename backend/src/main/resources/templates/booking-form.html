@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Reservation Form - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Create Reservation</h1>
+            <a th:href="@{/bookings}" class="btn btn-secondary">
+                <i data-feather="arrow-left"></i> Back to Ledger
+            </a>
+        </div>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <form th:action="@{/bookings/add}" th:object="${booking}" method="post">
+                <div class="form-group">
+                    <label for="guest">Select Guest</label>
+                    <select id="guest" th:field="*{guest.id}" required>
+                        <option value="" disabled selected>-- Select a registered guest --</option>
+                        <option th:each="g : ${guests}" th:value="${g.id}" th:text="${g.name} + ' (' + ${g.email} + ')'"></option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="room">Select Accommodation (Available Only)</label>
+                    <select id="room" th:field="*{room.id}" required>
+                        <option value="" disabled selected>-- Select an available room --</option>
+                        <option th:each="r : ${rooms}" th:value="${r.id}" th:text="'Room ' + ${r.number} + ' - ' + ${r.type} + ' ($' + ${r.price} + '/night)'"></option>
+                    </select>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <div class="form-group">
+                        <label for="checkIn">Check-In Date</label>
+                        <input type="date" id="checkIn" th:field="*{checkIn}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkOut">Check-Out Date</label>
+                        <input type="date" id="checkOut" th:field="*{checkOut}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" th:field="*{status}">
+                        <option value="upcoming">Upcoming</option>
+                        <option value="active">Active (Check-In Immediately)</option>
+                    </select>
+                </div>
+                
+                <div style="margin-top: 32px; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary" style="padding: 14px 32px;">
+                        <i data-feather="calendar"></i> Confirm Reservation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

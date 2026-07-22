@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">LuxeStay Hotel</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="light-theme">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-logo">
+                    <i data-feather="key" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div class="brand-title">LUXESTAY</div>
+                <div class="brand-subtitle">Boutique Hotel & Spa</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a th:href="@{/}" class="nav-link"><i data-feather="book-open"></i> Front Desk</a>
+                <a th:href="@{/rooms/floor-plan}" class="nav-link"><i data-feather="map"></i> Visual Floor Plan</a>
+                <a th:href="@{/rooms}" class="nav-link"><i data-feather="grid"></i> Room Registry</a>
+                <a th:href="@{/guests}" class="nav-link"><i data-feather="users"></i> Guest Registry</a>
+                <a th:href="@{/bookings}" class="nav-link"><i data-feather="bookmark"></i> Reservations</a>
+                
+                <!-- Phase 1 Modules -->
+                <a th:href="@{/housekeeping}" class="nav-link"><i data-feather="wind"></i> Housekeeping</a>
+                <a th:href="@{/maintenance}" class="nav-link"><i data-feather="tool"></i> Maintenance</a>
+                <a th:href="@{/invoices}" class="nav-link"><i data-feather="dollar-sign"></i> Finance & Billing</a>
+                
+                <!-- Phase 2 Modules -->
+                <a th:href="@{/room-service}" class="nav-link"><i data-feather="coffee"></i> Room Service</a>
+                <a th:href="@{/analytics}" class="nav-link"><i data-feather="bar-chart-2"></i> Executive Reports</a>
+                <!-- Phase 4 Modules -->
+                <a th:href="@{/lost-and-found}" class="nav-link"><i data-feather="search"></i> Lost & Found</a>
+                <a th:href="@{/luggage}" class="nav-link"><i data-feather="briefcase"></i> Luggage Storage</a>
+                <!-- Phase 5 Modules -->
+                <a th:href="@{/kiosk}" class="nav-link"><i data-feather="shopping-bag"></i> Grab & Go Kiosk</a>
+                <a th:href="@{/staff}" class="nav-link"><i data-feather="users"></i> HR Portal</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="search-bar" style="display: flex; align-items: center; gap: 8px; background: var(--surface-color); padding: 8px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                    <i data-feather="search" style="color: var(--text-secondary);"></i>
+                    <input type="text" placeholder="Search anything..." style="border: none; background: transparent; color: var(--text-primary); outline: none; width: 100%;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background-color: var(--surface-hover); display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--text-primary)">U</span>
+                        </div>
+                        <div>
+                            <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);">Admin User</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Front Desk</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Page Content Injected Here -->
+            <div class="page-container" th:replace="${content}">
+            </div>
+        </main>
+    </div>
+    <script>
+        feather.replace({ width: '18px', height: '18px' })
+    </script>
+</body>
+</html>

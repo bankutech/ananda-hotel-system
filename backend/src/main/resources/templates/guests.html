@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Guests - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Guest Registry</h1>
+            <a th:href="@{/guests/add}" class="btn btn-primary">
+                <i data-feather="plus"></i> Register New Guest
+            </a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Guest Name</th>
+                        <th>Contact Number</th>
+                        <th>Email Address</th>
+                        <th>Identification</th>
+                        <th>Status</th>
+                        <th>Loyalty Points</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="guest : ${guests}">
+                        <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--primary-color);" th:text="${guest.name}"></td>
+                        <td th:text="${guest.phone}"></td>
+                        <td th:text="${guest.email}"></td>
+                        <td th:text="${guest.idDocument}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${guest.status == 'VIP' ? 'warning' : (guest.status == 'Blacklisted' ? 'danger' : 'available')}" th:text="${guest.status}"></span>
+                        </td>
+                        <td th:text="${guest.loyaltyPoints} + ' pts'"></td>
+                        <td style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
+                            <a th:href="@{/guests/edit/{id}(id=${guest.id})}" class="btn btn-secondary" style="padding: 6px 12px; border: none;">
+                                <i data-feather="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                            </a>
+                            <form th:action="@{/guests/delete/{id}(id=${guest.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-secondary" style="padding: 6px 12px; border: none; color: var(--danger-color);" onclick="return confirm('Are you sure you want to remove this guest from the registry?');">
+                                    <i data-feather="trash-2" style="width: 14px; height: 14px;"></i> Remove
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(guests)}">
+                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            No guests currently registered.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

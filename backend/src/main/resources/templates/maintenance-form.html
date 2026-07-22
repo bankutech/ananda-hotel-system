@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Report Issue - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Report Maintenance Issue</h1>
+            <a th:href="@{/maintenance}" class="btn btn-secondary">
+                <i data-feather="arrow-left"></i> Back to Tickets
+            </a>
+        </div>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <form th:action="@{/maintenance/add}" th:object="${ticket}" method="post">
+                <div class="form-group">
+                    <label for="room">Affected Room</label>
+                    <select id="room" th:field="*{room.id}" required>
+                        <option value="" disabled selected>-- Select a room --</option>
+                        <option th:each="r : ${rooms}" th:value="${r.id}" th:text="'Room ' + ${r.number}"></option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="desc">Issue Description</label>
+                    <textarea id="desc" th:field="*{issueDescription}" required rows="4" placeholder="e.g. Broken AC, leaking faucet"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="priority">Priority</label>
+                    <select id="priority" th:field="*{priority}">
+                        <option value="Low">Low (Cosmetic)</option>
+                        <option value="Medium">Medium (Nuisance)</option>
+                        <option value="High">High (Impacting Stay)</option>
+                        <option value="Critical">Critical (Room Uninhabitable)</option>
+                    </select>
+                </div>
+                
+                <div style="margin-top: 32px; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary" style="padding: 14px 32px;">
+                        <i data-feather="tool"></i> Submit Ticket
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

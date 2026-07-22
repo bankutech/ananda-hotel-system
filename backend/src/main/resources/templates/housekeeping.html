@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Housekeeping - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Housekeeping Dashboard</h1>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Type</th>
+                        <th>Current Status</th>
+                        <th>Cleaning Status</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="room : ${rooms}">
+                        <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--primary-color);" th:text="${room.number}"></td>
+                        <td th:text="${room.type}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${room.status == 'available' ? 'available' : (room.status == 'occupied' ? 'occupied' : 'warning')}" th:text="${room.status}"></span>
+                        </td>
+                        <td>
+                            <span th:class="'badge ' + ${room.cleaningStatus == 'Clean' ? 'available' : 'danger'}" th:text="${room.cleaningStatus}"></span>
+                        </td>
+                        <td style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
+                            <form th:if="${room.cleaningStatus != 'Clean'}" th:action="@{/housekeeping/clean/{id}(id=${room.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-primary" style="padding: 6px 12px; border: none; background: var(--success-color);">
+                                    <i data-feather="check" style="width: 14px; height: 14px;"></i> Mark Clean
+                                </button>
+                            </form>
+                            <form th:if="${room.cleaningStatus == 'Clean'}" th:action="@{/housekeeping/dirty/{id}(id=${room.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-secondary" style="padding: 6px 12px; border: none; color: var(--danger-color);">
+                                    <i data-feather="x" style="width: 14px; height: 14px;"></i> Mark Dirty
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

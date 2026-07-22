@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Dashboard - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Dashboard Overview</h1>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-title"><i data-feather="grid" style="width: 16px; height: 16px; margin-right: 8px;"></i> Total Rooms</div>
+                <div class="stat-value" th:text="${totalRooms}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title"><i data-feather="check-circle" style="width: 16px; height: 16px; margin-right: 8px;"></i> Available Rooms</div>
+                <div class="stat-value" th:text="${availableRooms}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title"><i data-feather="users" style="width: 16px; height: 16px; margin-right: 8px;"></i> Active Staff</div>
+                <div class="stat-value" th:text="${activeStaff}">0</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 20px; font-size: 18px; font-weight: 600;">Welcome to LuxeStay Hotel System (Java Version)</h2>
+            <p style="color: var(--text-secondary)">This is the new Java Spring Boot + Thymeleaf server-side rendered application.</p>
+        </div>
+    </section>
+</body>
+</html>

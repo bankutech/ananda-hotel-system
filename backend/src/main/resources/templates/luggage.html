@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Luggage Storage - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Luggage Storage Ticketing</h1>
+        </div>
+
+        <div class="card" style="margin-bottom: 40px;">
+            <h3 style="font-family: var(--font-heading); font-size: 24px; color: var(--primary-color); margin-bottom: 24px;">Store Luggage</h3>
+            <form th:action="@{/luggage/add}" th:object="${newTicket}" method="post" style="display: grid; grid-template-columns: 1fr 1fr 1fr 2fr auto; gap: 16px; align-items: end;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Guest Name</label>
+                    <input type="text" th:field="*{guestName}" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Room #</label>
+                    <input type="text" th:field="*{roomNumber}">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Bag Count</label>
+                    <input type="number" th:field="*{bagCount}" min="1" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Tag Numbers</label>
+                    <input type="text" th:field="*{tagNumbers}" placeholder="e.g., A12-A14" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Ticket</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Guest</th>
+                        <th>Room</th>
+                        <th>Bags</th>
+                        <th>Tags</th>
+                        <th>Time Stored</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="t : ${tickets}">
+                        <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--primary-color);" th:text="'TKT-' + ${t.id}"></td>
+                        <td th:text="${t.guestName}"></td>
+                        <td th:text="${t.roomNumber}"></td>
+                        <td th:text="${t.bagCount}"></td>
+                        <td th:text="${t.tagNumbers}"></td>
+                        <td th:text="${#temporals.format(t.timeStored, 'dd MMM HH:mm')}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${t.status == 'Retrieved' ? 'available' : 'warning'}" th:text="${t.status}"></span>
+                        </td>
+                        <td style="text-align: right;">
+                            <form th:action="@{/luggage/update/{id}(id=${t.id})}" method="post" style="display:inline;" th:if="${t.status == 'Stored'}">
+                                <input type="hidden" name="status" value="Retrieved">
+                                <button type="submit" class="btn btn-secondary">Mark Retrieved</button>
+                            </form>
+                            <span th:if="${t.status == 'Retrieved'}" style="color: var(--text-secondary); font-size: 13px;">✔ Closed</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

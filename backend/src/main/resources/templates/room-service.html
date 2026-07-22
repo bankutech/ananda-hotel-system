@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Room Service (KOT) - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Kitchen Order Tickets</h1>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Item Ordered</th>
+                        <th>Qty</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Update Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--primary-color);" th:text="'Room ' + ${order.room.number}"></td>
+                        <td th:text="${order.menuItem.name}"></td>
+                        <td th:text="${order.quantity}"></td>
+                        <td th:text="'$' + ${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${order.status == 'Completed' ? 'available' : (order.status == 'Preparing' ? 'danger' : 'warning')}" th:text="${order.status}"></span>
+                        </td>
+                        <td style="text-align: right;">
+                            <form th:action="@{/room-service/update/{id}(id=${order.id})}" method="post" style="display:inline; display: flex; justify-content: flex-end; gap: 8px;">
+                                <select name="status" style="padding: 6px; width: 120px; font-size: 13px;" onchange="this.form.submit()">
+                                    <option value="Preparing" th:selected="${order.status == 'Preparing'}">Preparing</option>
+                                    <option value="Delivering" th:selected="${order.status == 'Delivering'}">Delivering</option>
+                                    <option value="Completed" th:selected="${order.status == 'Completed'}">Completed</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(orders)}">
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            No active room service orders.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

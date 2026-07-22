@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Employee HR Portal - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Employee HR & Operations</h1>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+            <!-- Left Column: Staff List & Time Clock -->
+            <div>
+                <h3 style="font-family: var(--font-heading); font-size: 24px; color: var(--primary-color); margin-bottom: 24px;">Active Roster & Time Clock</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Shift</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="employee : ${staffList}">
+                                <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--primary-color);" th:text="${employee.name}"></td>
+                                <td th:text="${employee.role}"></td>
+                                <td th:text="${employee.shift}"></td>
+                                <td style="text-align: right;">
+                                    <form th:action="@{/staff/clock-in/{id}(id=${employee.id})}" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-primary" style="padding: 6px 12px; font-size: 11px;">Clock In</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="font-family: var(--font-heading); font-size: 24px; color: var(--primary-color); margin-top: 40px; margin-bottom: 24px;">Time Logs</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="log : ${logs}">
+                                <td th:text="${log.staff.name}"></td>
+                                <td th:text="${#temporals.format(log.clockInTime, 'dd MMM HH:mm')}"></td>
+                                <td th:text="${log.clockOutTime != null ? #temporals.format(log.clockOutTime, 'dd MMM HH:mm') : 'Currently Working'}"></td>
+                                <td style="text-align: right;">
+                                    <form th:if="${log.clockOutTime == null}" th:action="@{/staff/clock-out/{id}(id=${log.id})}" method="post">
+                                        <button type="submit" class="btn btn-secondary" style="padding: 6px 12px; font-size: 11px;">Clock Out</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Column: Digital Logbook -->
+            <div>
+                <div class="card">
+                    <h3 style="font-family: var(--font-heading); font-size: 24px; color: var(--primary-color); margin-bottom: 24px;">Digital Logbook</h3>
+                    
+                    <form th:action="@{/staff/message}" th:object="${newMessage}" method="post" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border-color);">
+                        <input type="text" th:field="*{senderName}" placeholder="Your Name" required style="padding: 10px; font-size: 13px;">
+                        <textarea th:field="*{content}" placeholder="Type a message for the next shift..." rows="3" required style="padding: 10px; font-size: 13px;"></textarea>
+                        <button type="submit" class="btn btn-secondary" style="align-self: flex-end;">Post Message</button>
+                    </form>
+
+                    <div style="display: flex; flex-direction: column; gap: 16px; max-height: 500px; overflow-y: auto;">
+                        <div th:each="msg : ${messages}" style="background: rgba(44, 76, 59, 0.05); padding: 16px; border-radius: var(--radius-sm); border-left: 3px solid var(--primary-color);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <strong style="color: var(--primary-color); font-size: 14px;" th:text="${msg.senderName}"></strong>
+                                <span style="font-size: 11px; color: var(--text-secondary);" th:text="${#temporals.format(msg.timestamp, 'dd MMM HH:mm')}"></span>
+                            </div>
+                            <p style="font-size: 14px; line-height: 1.5;" th:text="${msg.content}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

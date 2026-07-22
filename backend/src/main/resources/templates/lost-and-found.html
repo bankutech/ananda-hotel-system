@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Lost & Found - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Lost & Found Log</h1>
+        </div>
+
+        <div class="card" style="margin-bottom: 40px;">
+            <h3 style="font-family: var(--font-heading); font-size: 24px; color: var(--primary-color); margin-bottom: 24px;">Log New Item</h3>
+            <form th:action="@{/lost-and-found/add}" th:object="${newItem}" method="post" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 16px; align-items: end;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Item Description</label>
+                    <input type="text" th:field="*{description}" placeholder="e.g., Gold Rolex Watch" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Found Location</label>
+                    <input type="text" th:field="*{foundLocation}" placeholder="e.g., Poolside" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Log Item</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Date Found</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="'#' + ${item.id}"></td>
+                        <td style="font-weight: 700; color: var(--primary-color);" th:text="${item.description}"></td>
+                        <td th:text="${item.foundLocation}"></td>
+                        <td th:text="${item.dateFound}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${item.status == 'Claimed' ? 'available' : (item.status == 'Unclaimed' ? 'danger' : 'warning')}" th:text="${item.status}"></span>
+                        </td>
+                        <td style="text-align: right;">
+                            <form th:action="@{/lost-and-found/update/{id}(id=${item.id})}" method="post" style="display:inline; display: flex; justify-content: flex-end; gap: 8px;">
+                                <select name="status" style="padding: 6px; width: 120px; font-size: 13px;" onchange="this.form.submit()">
+                                    <option value="Unclaimed" th:selected="${item.status == 'Unclaimed'}">Unclaimed</option>
+                                    <option value="Claimed" th:selected="${item.status == 'Claimed'}">Claimed</option>
+                                    <option value="Disposed" th:selected="${item.status == 'Disposed'}">Disposed</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

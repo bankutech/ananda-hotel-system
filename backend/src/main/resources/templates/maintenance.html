@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Maintenance - LuxeStay</title>
+</head>
+<body>
+    <section>
+        <div class="page-header">
+            <h1 class="page-title">Maintenance Tickets</h1>
+            <a th:href="@{/maintenance/add}" class="btn btn-primary">
+                <i data-feather="plus"></i> Report Issue
+            </a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Description</th>
+                        <th>Priority</th>
+                        <th>Reported Date</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <td style="font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--primary-color);" th:text="${ticket.room.number}"></td>
+                        <td th:text="${ticket.issueDescription}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${ticket.priority == 'Critical' ? 'danger' : 'warning'}" th:text="${ticket.priority}"></span>
+                        </td>
+                        <td th:text="${ticket.reportedDate}"></td>
+                        <td>
+                            <span th:class="'badge ' + ${ticket.status == 'Resolved' ? 'available' : 'warning'}" th:text="${ticket.status}"></span>
+                        </td>
+                        <td style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
+                            <form th:if="${ticket.status != 'Resolved'}" th:action="@{/maintenance/resolve/{id}(id=${ticket.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-primary" style="padding: 6px 12px; border: none; background: var(--success-color);">
+                                    <i data-feather="check-circle" style="width: 14px; height: 14px;"></i> Mark Resolved
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(tickets)}">
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            No open maintenance issues.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>
