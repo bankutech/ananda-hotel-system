@@ -1,4 +1,4 @@
-# ananda-hotel-system
+# ananda hotel system
 
 ## Overview
 <div align="center">
