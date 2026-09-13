@@ -1,3 +1,6 @@
+# ananda-hotel-system
+
+## Overview
 <div align="center">
   <img src="https://images.unsplash.com/photo-1542314831-c6a4d14d8c85?q=80&w=1200&auto=format&fit=crop" alt="Ananda Hotel Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
 
@@ -91,3 +94,9 @@ To bypass the security perimeter locally, use the master credentials:
 <div align="center">
   <i>Crafted with care for the hospitality industry.</i>
 </div>
+
+## Getting Started
+Please refer to the source files for specific installation and usage instructions. Ensure that your local environment meets the standard requirements for the associated technologies.
+
+## Project Structure
+This project is organized into standard directories. Key configuration files and primary source code are located in the root directory.
